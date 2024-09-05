@@ -1,3 +1,6 @@
+/*
+source: https://cp-algorithms.com/geometry/intersecting_segments.html
+*/
 #include "geometry_float.h"
 
 struct seg {

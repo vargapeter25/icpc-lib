@@ -1,3 +1,7 @@
+/*
+source of some codes: https://cp-algorithms.com/
+*/
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -17,6 +21,8 @@ inline long double dot(const point& a, const point& b) { return a.x * b.x + a.y 
 inline long double cross(const point& a, const point& b) { return a.x * b.y - a.y * b.x; }
 inline long double det(long double a, long double b, long double c, long double d) { return a * c - b * d; }
 inline long double sqr(long double x) { return x*x; }
+inline int sgn(auto x) { return (x > 0 ) - (x < 0); }
+inline int dir(const point& a, const point& b, const point& c) { return sgn(cross(b - a, c - a)); }
 
 struct line{ // a * x + b * y + c = 0, normalizáltnak kell lennie
     long double a, b, c;

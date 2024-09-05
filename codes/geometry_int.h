@@ -1,3 +1,6 @@
+/*
+source of some codes: https://cp-algorithms.com/
+*/
 #include <bits/stdc++.h>
 using namespace std;
 
