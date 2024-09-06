@@ -1,0 +1,110 @@
+/*
+original source: https://judge.yosupo.jp/submission/106000
+*/
+#include <bits/stdc++.h>
+using namespace std;
+
+constexpr int mod = 998244353; // = 2^k * c + 1 | primitív gyöknek jónak kell lennie
+constexpr int N = 1 << 20; // 2^l, l <= k | max N amit transzformálni lehet
+struct mint {
+    int x;
+    constexpr inline mint(int x = 0) : x(x) {}
+    constexpr inline mint operator+(mint o) const { return x + o.x < mod ? x + o.x : x + o.x - mod; }
+    constexpr inline mint operator-(mint o) const { return x - o.x < 0 ? x - o.x + mod : x - o.x; }
+    constexpr inline mint operator*(mint o) const { return int(uint64_t(x) * o.x % mod); }
+    constexpr inline mint &operator+=(mint o) { return *this = *this + o; }
+    constexpr inline mint &operator-=(mint o) { return *this = *this - o; }
+    constexpr inline mint &operator*=(mint o) { return *this = *this * o; }
+    constexpr inline mint inv() const { return pow(mod - 2); }
+    constexpr inline mint pow(auto x) const {
+        mint a = *this; mint b = 1; for (; x; x >>= 1) { if (x & 1) { b *= a; } a *= a; } return b;
+    }
+};
+
+constexpr long long mod_primitive_root(){ // kiszámítja a moduló egy primitív gyökét
+    array<long long, 64> primes; int size = 0; long long p = 2, m = mod-1;
+    while(p*p <= m) { if(m % p == 0) primes[size++] = p; while(m % p == 0) m /= p; ++p; }
+    if(m > 1) primes[size++] = m;
+    for(long long i = 2; i < mod; i++){
+        bool ok = true; for(int j = 0; j < size; j++) ok = ok && mint(i).pow((mod - 1) / primes[j]).x != 1; if(ok) return i;
+    }
+    return -1;
+}
+
+mint w[N];
+__attribute__((constructor)) void init() {
+    w[N / 2] = 1;
+    constexpr mint g = mint(mod_primitive_root()).pow(mod / N);
+    for (int i = N / 2 + 1; i < N; ++i) w[i] = w[i - 1] * g;
+    for (int i = N / 2 - 1; i > 0; --i) w[i] = w[i << 1];
+}
+void dft(mint f[], int n) { // n kettő hatvány
+    for (int k = n / 2; k; k /= 2)
+        for (int i = 0; i < n; i += k + k)
+            for (int j = 0; j < k; ++j) {
+                mint x = f[i + j]; mint y = f[i + j + k]; f[i + j] = x + y; f[i + j + k] = (x - y) * w[k + j];
+            }
+}
+void ift(mint f[], int n) { // n kettő hatvány
+    for (int k = 1; k < n; k *= 2)
+        for (int i = 0; i < n; i += k + k)
+            for (int j = 0; j < k; ++j) {
+                mint x = f[i + j]; mint y = f[i + j + k] * w[k + j]; f[i + j] = x + y; f[i + j + k] = x - y;
+            }
+    mint inv = mod - (mod - 1) / n;
+    std::reverse(f + 1, f + n);
+    for (int i = 0; i < n; ++i) f[i] *= inv;
+}
+struct poly : std::vector<mint> { using std::vector<mint>::vector;
+    poly &add(const poly &o) { if (size() < o.size()) resize(o.size()); for (int i = 0; i < o.size(); ++i) (*this)[i] += o[i]; return *this; }
+    poly &sub(const poly &o) { if (size() < o.size()) resize(o.size()); for (int i = 0; i < o.size(); ++i) (*this)[i] -= o[i]; return *this; }
+    poly &mul(const poly &o) { if (size() < o.size()) resize(o.size()); for (int i = 0; i < o.size(); ++i) (*this)[i] *= o[i]; return *this; }
+    poly &mul(const mint &o) { for (mint &i: *this) i *= o; return *this; }
+    poly &sqr()        { for (mint &i: *this) i *= i; return *this; }
+    poly &derivative() { for(int i = 0; i < (int)size() - 1; i++) (*this)[i] = (*this)[i + 1] * mint(i + 1); pop_back(); return *this; }
+    poly &integral()   { resize(size()+1); for(int i = (int)size() - 1; i > 0; i--) (*this)[i] = (*this)[i-1] * mint(i).inv(); (*this)[0] = mint(); return *this; }
+    poly conv(const poly &o){
+        int n = __bit_ceil(size() + o.size() - 1); 
+        return copy().dft(n).mul(o.copy().dft(n)).ift(n).resize(size() + o.size() - 1);
+    }
+    poly inv() const { // p^-1 első p.size() eleme
+        if (front().x == 0) return {};
+        int m = size();
+        poly inv = {front().inv()};
+        for (int k = 1; k < m; k *= 2) {
+            int n = k * 2; poly a = inv.copy().dft(n), b = pre(n).dft(n);
+            inv.sub(a.copy().mul(b).ift(n).del(k).dft(n).mul(a).ift(n).resize(k).ins(k));
+        }
+        return inv.resize(m);
+    }
+    poly log() const{ // res[0] = 0, log(p) első p.size() eleme
+        int n = __bit_ceil(size() * 2 - 1);
+        return copy().derivative().dft(n).mul(inv().dft(n)).ift(n).integral().resize(size());
+    }
+    poly exp() const { // p[0] == 0, különben nem valid az eremény, exp(p) első p.size() eleme
+        if (front().x != 0) return {};
+        int m = size();
+        poly e = {1};
+        for (int k = 1; k < m; k *= 2) {
+            int n = k * 2;
+            poly elog = e.resize(n).log(); e.dft(n*2);
+            e.add(pre(n).sub(elog).dft(n*2).mul(e)).ift(n*2).resize(n);
+        }
+        return e.resize(m);
+    }
+    poly pow(auto k) { // a polinom k-adik hatványa
+        if(k == 0) return poly{1}.resize(size());
+        int j = 0;
+        while(j < size() && (*this)[j].x == 0) ++j;
+        if(j == size()) return poly{0}.resize(size());
+        mint c = (*this)[j];
+        return copy().del(j).mul(c.inv()).log().mul(mint(k % mod)).exp().mul(c.pow(k % (mod - 1))).ins(j > size() / k ? (long long)size() : j * k).resize(size());
+    }
+    poly copy() const { return *this; }
+    poly &resize(auto sz) { return vector::resize(sz), *this; }
+    poly &dft(int n) { return ::dft(resize(n).data(), n), *this; }
+    poly &ift(int n) { return ::ift(resize(n).data(), n), *this; }
+    poly &ins(int sz) { return insert(begin(), sz, mint()), *this; }
+    poly &del(int sz) { return erase(begin(), begin() + sz), *this; }
+    poly pre(int sz) const { return sz < size() ? poly(begin(), begin() + sz) : copy(); }
+};
