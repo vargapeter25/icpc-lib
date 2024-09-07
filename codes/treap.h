@@ -1,3 +1,6 @@
+/*
+original source: https://usaco.guide/adv/treaps?lang=cpp
+*/
 #include <bits/stdc++.h>
 using namespace std;
 
