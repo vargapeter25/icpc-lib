@@ -111,7 +111,7 @@ struct poly : std::vector<mint> { using std::vector<mint>::vector;
         }
         return e.resize(m);
     }
-    poly pow(auto k) const {
+    poly pow(auto k) const { // k: int, long long
         if(k == 0) return poly{1}.resize(size());
         int j = 0;
         while(j < size() && (*this)[j].x == 0) ++j;
