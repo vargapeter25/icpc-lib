@@ -5,10 +5,10 @@ original source: https://usaco.guide/adv/treaps?lang=cpp
 using namespace std;
 
 mt19937 rnd(42123); // mt19937_64
-struct node { // az upd() és push()-t kell implementálni | !!! alapvetően nem hívódik meg az upd() a konstruálásnál
+struct node { // az upd() és push()-t kell implementálni | upd()-et a konstruktor is hívja
 	int val, w, size; // val érték (cserélhető), w súly, size a részfa mérete
     node *l, *r; // bal, jobb gyerek
-	node(int c) : val(c), w(rnd()), size(1), l(NULL), r(NULL) {}
+	node(int c) : val(c), w(rnd()), size(1), l(NULL), r(NULL) { upd(); }
     ~node() { delete l; delete r; }
     inline void upd() {} // update az l, r-ből
     inline void push() {} // push l, r-be

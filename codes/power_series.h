@@ -23,7 +23,7 @@ struct mint {
         if (pow(mod >> 1).x != 1) return 0;
         int Q = (mod - 1) >> (__countr_zero(mod-1));
         mint x = pow((Q + 1) >> 1), y = pow(Q);
-        for (int k = 21; k >= 0; --k)
+        for (int k = __countr_zero(mod - 1) - 1; k >= 0; --k) // TODO: fix 21
             if (y.pow(1 << k).x != 1) {
                 x *= mint(mod_primitive_root()).pow(mod >> (k + 2));
                 y *= mint(mod_primitive_root()).pow(mod >> (k + 1));
