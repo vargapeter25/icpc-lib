@@ -53,6 +53,7 @@ set<seg>::iterator next(set<seg>::iterator it) {
     return ++it;
 }
 
+// meghatároz egy metsző szakaszpárt az a-ból (x koordináta szerinti legkisebb metszéspont), ezek indexével tér vissza, ha nincs akkor {-1, -1}
 pair<int, int> solve(const vector<seg>& a) {
     int n = (int)a.size();
     vector<event> e;

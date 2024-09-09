@@ -65,7 +65,7 @@ bool intersect(const line& l1, const line& l2, point& res) {
     return true;
 }
 
-bool intersect(point a, point b, point c, point d, point& left, point& right) {
+bool intersect(point a, point b, point c, point d, point& left, point& right) { // ellenőrzi a metszést, metszés esetén a [left, right] szakasz a metszet
     if (!intersect1(a.x, b.x, c.x, d.x) || !intersect1(a.y, b.y, c.y, d.y))
         return false;
     line m(a, b);
@@ -94,7 +94,7 @@ struct circle{
     long double r;
 };
 
-vector<point> intersection(const circle& circ, const line& l){
+vector<point> intersection(const circle& circ, const line& l){ // kör-egyenes metszéspontok
     long double r = circ.r, a = l.a, b = l.b, c = l.c - l.a * circ.p.x - l.b * circ.p.y;
     double x0 = -a*c/(a*a+b*b), y0 = -b*c/(a*a+b*b);
     if (c*c > r*r*(a*a+b*b)+EPS) return {};
@@ -109,7 +109,7 @@ vector<point> intersection(const circle& circ, const line& l){
     return {point{ax, ay} + circ.p, point{bx, by} + circ.p};
 }
 
-vector<point> intersection(circle circ1, circle circ2){
+vector<point> intersection(circle circ1, circle circ2){ // kör-kör metszéspontok
     point origo = circ1.p;
     circ2.p = circ2.p - origo;
     circ1.p = {0, 0};
@@ -132,7 +132,7 @@ void tangents (point c, double r1, double r2, vector<line> & ans) {
     ans.push_back (l);
 }
 
-vector<line> tangents (circle a, circle b) {
+vector<line> tangents (circle a, circle b) { // 2 kör közös érintői
     vector<line> ans;
     for (int i=-1; i<=1; i+=2)
         for (int j=-1; j<=1; j+=2)

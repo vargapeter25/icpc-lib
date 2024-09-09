@@ -18,7 +18,7 @@ inline long long cross(const point& a, const point& b) { return a.x * b.y - b.x 
 inline int sgn(long long x) { return (x > 0) - (x < 0); }
 inline int dir(const point& a, const point& b, const point& c) { return sgn(cross(b - a, c - a)); }
 
-bool comp_args(const point& a, const point& b){
+bool comp_args(const point& a, const point& b){ // vektorok rendezése szög alapján (azon belül hossz alapján)
     bool fa = a.y > 0 || (a.y == 0 && a.x >= 0); 
     bool fb = b.y > 0 || (b.y == 0 && b.x >= 0);
     if(fa != fb) return fa;
@@ -26,7 +26,7 @@ bool comp_args(const point& a, const point& b){
     return c != 0 ? c > 0 : a.len() < b.len();
 }
 
-inline bool contains(const point& a, const point& b, const point& p){
+inline bool contains(const point& a, const point& b, const point& p){ // szakasz tartalmazza-e
     if(dir(a, b, p) != 0) return false;
     long long d = dot(b - a, p - a);
     return 0 <= d && d <= (b-a).len();
@@ -36,13 +36,13 @@ inline bool intersect1(long long a1, long long a2, long long b1, long long b2){
     return max(min(a1, a2), min(b1, b2)) <= min(max(a1, a2), max(b1, b2));
 }
 
-inline bool intersect(const point& a1, const point& a2, const point& b1, const point& b2){
+inline bool intersect(const point& a1, const point& a2, const point& b1, const point& b2){ // szakaszok metszik-e egymást
     if(dir(b1, a1, b2) == 0 && dir(b1, a2, b2) == 0) 
         return intersect1(a1.x, a2.x, b1.x, b2.x) && intersect1(a1.y, a2.y, b1.y, b2.y);
     return dir(a1, a2, b1) != dir(a1, a2, b2) && dir(b1, b2, a1) != dir(b1, b2, a2);
 }
 
-vector<point> convex_hull(vector<point> a){
+vector<point> convex_hull(vector<point> a){ // az a pontok konvex burka, minimális pontszámmal
     if(a.empty()) return {};
     int pos = min_element(a.begin(), a.end(), [](const point& a, const point& b) { return a.x < b.x || (a.x == b.x && a.y < b.y); }) - a.begin();
     swap(a[0], a[pos]);
@@ -63,7 +63,7 @@ vector<point> convex_hull(vector<point> a){
     return hull;
 }
 
-vector<point> minkowski_sum(vector<point> a, vector<point> b){
+vector<point> minkowski_sum(vector<point> a, vector<point> b){ // a és b konvex burkok minkowski összege (konvex burok, minimális pontszámmal)
     if(a.empty() || b.empty()) return {};
     auto comp = [](const point& a, const point& b) { return a.y < b.y || (a.y == b.y && a.x < b.x); };
     int min_a = min_element(a.begin(), a.end(), comp) - a.begin();
