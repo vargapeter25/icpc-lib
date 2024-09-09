@@ -1,3 +1,6 @@
+/*
+original source: https://judge.yosupo.jp/submission/169055
+*/
 #include <bits/stdc++.h>
 using namespace std;
 
