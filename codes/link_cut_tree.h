@@ -90,14 +90,14 @@ struct snode {         //////// VARIABLES
 		return fbo(b);
 	} 
 	//////// MODIFICATIONS
-	void set(int v) { access(); val = v; upd(); } // changes value
+	void set(ll v) { access(); val = v; upd(); } // changes value
 	friend void link(sn x, sn y, bool force = 0) { // ha force: x - y él minden esetben | ha nem force: akkor y-nak gyökérnek kell lenni
 		assert(!connected(x, y));
 		if (force) y->make_root();  // make x par of y
 		else { y->access(); assert(!y->c[0]); }
 		x->access(); set_link(y, x, 0); y->upd();
 	}
-	friend void cut(sn y) {  // cut y from its parent | ha nincs exit(1)
+	friend void cut(sn y) {  // cut y from its parent | ha nincs RTE
 		y->access();
 		assert(y->c[0]);
 		y->c[0]->p = y->c[0] = NULL;
