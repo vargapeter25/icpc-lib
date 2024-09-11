@@ -1,5 +1,5 @@
 /*
-https://cp-algorithms.com/graph/dinic.html
+original source: https://cp-algorithms.com/graph/dinic.html
 */
 #include <bits/stdc++.h>
 using namespace std;
