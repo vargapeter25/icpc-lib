@@ -4,7 +4,7 @@ original source: https://judge.yosupo.jp/submission/106000
 #include <bits/stdc++.h>
 using namespace std;
 
-constexpr int mod = 998244353; // = 2^k * c + 1 | primitív gyöknek jónak kell lennie
+constexpr int mod = 998244353; // = 2^k * c + 1 | primitív gyöknek jónak kell lennie | 2013265921, 167772161, 2113929217
 constexpr int N = 1 << 20; // 2^l, l <= k | max N amit transzformálni lehet
 struct mint {
     int x;
