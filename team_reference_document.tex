@@ -1,0 +1,102 @@
+\documentclass[12pt,english]{article}
+
+\usepackage[a4paper,
+            left=0.2in,
+            right=0.2in,
+            top=0.3in,
+            bottom=0.2in,
+            footskip=.0in,
+            headsep=.1in]{geometry}
+
+\usepackage{blindtext}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+
+\setlength\partopsep{-\topsep}
+\addtolength\partopsep{-\parskip}
+\addtolength\partopsep{0.0cm}
+\linespread{0.0} % sorköz
+
+\usepackage{pdfpages}
+
+\usepackage{minted}
+
+%================================
+
+\begin{document}
+
+\begin{titlepage}
+    \begin{center}
+        \vspace*{\fill}
+        \includegraphics[width=5cm]{elte.pdf}
+
+        \vspace*{0.5cm}
+        
+        \textbf{Eötvös Loránd University}
+        
+        \vspace*{1cm}
+        
+        {\Huge \textbf{ELTE 1}}
+        \vspace*{\fill}
+             
+        \textbf{ICPC World Finals 2024}
+    \end{center}
+ \end{titlepage}
+
+\section{Centroid Decomposition}
+\inputminted[autogobble,breaklines,mathescape,linenos,numbersep=5pt,xleftmargin=0pt,fontsize=\footnotesize]{cpp}{codes/centroid.tex}
+
+\section{Heavy Light Decomposition}
+\inputminted[autogobble,breaklines,mathescape,linenos,numbersep=5pt,xleftmargin=0pt,fontsize=\footnotesize]{cpp}{codes/heavylight.tex}
+
+\section{Bipartite Max Matching}
+\inputminted[autogobble,breaklines,mathescape,linenos,numbersep=5pt,xleftmargin=0pt,fontsize=\footnotesize]{cpp}{codes/hopcroft_carp.tex}
+
+\section{Max Matching}
+\inputminted[autogobble,breaklines,mathescape,linenos,numbersep=5pt,xleftmargin=0pt,fontsize=\footnotesize]{cpp}{codes/max_matching.tex}
+
+\section{Max Weighted Matching}
+\inputminted[autogobble,breaklines,mathescape,linenos,numbersep=5pt,xleftmargin=0pt,fontsize=\footnotesize]{cpp}{codes/max_weighted_matching.tex}
+
+\section{Flow}
+\inputminted[autogobble,breaklines,mathescape,linenos,numbersep=5pt,xleftmargin=0pt,fontsize=\footnotesize]{cpp}{codes/flow.tex}
+
+\section{Min Cost Max Flow}
+\inputminted[autogobble,breaklines,mathescape,linenos,numbersep=5pt,xleftmargin=0pt,fontsize=\footnotesize]{cpp}{codes/mcmf.tex}
+
+\section{Convex Hull Trick}
+\inputminted[autogobble,breaklines,mathescape,linenos,numbersep=5pt,xleftmargin=0pt,fontsize=\footnotesize]{cpp}{codes/cht.tex}
+
+\section{Float Geometry}
+\inputminted[autogobble,breaklines,mathescape,linenos,numbersep=5pt,xleftmargin=0pt,fontsize=\footnotesize]{cpp}{codes/geometry_float.tex}
+
+\section{Integer Geometry}
+\inputminted[autogobble,breaklines,mathescape,linenos,numbersep=5pt,xleftmargin=0pt,fontsize=\footnotesize]{cpp}{codes/geometry_int.tex}
+
+\section{Ottoman Bentley}
+\inputminted[autogobble,breaklines,mathescape,linenos,numbersep=5pt,xleftmargin=0pt,fontsize=\footnotesize]{cpp}{codes/ottoman_bentley.tex}
+
+\section{Power series}
+\inputminted[autogobble,breaklines,mathescape,linenos,numbersep=5pt,xleftmargin=0pt,fontsize=\footnotesize]{cpp}{codes/power_series.tex}
+
+\section{String algorithms I.}
+\inputminted[autogobble,breaklines,mathescape,linenos,numbersep=5pt,xleftmargin=0pt,fontsize=\footnotesize]{cpp}{codes/str_alg.tex}
+
+\section{String algorithms II.}
+\inputminted[autogobble,breaklines,mathescape,linenos,numbersep=5pt,xleftmargin=0pt,fontsize=\footnotesize]{cpp}{codes/suff_arr.tex}
+
+\section{Treap}
+\inputminted[autogobble,breaklines,mathescape,linenos,numbersep=5pt,xleftmargin=0pt,fontsize=\footnotesize]{cpp}{codes/treap.tex}
+
+\section{Link Cut Tree}
+\inputminted[autogobble,breaklines,mathescape,linenos,numbersep=5pt,xleftmargin=0pt,fontsize=\footnotesize]{cpp}{codes/link_cut_tree.tex}
+
+\section{Math}
+\inputminted[autogobble,breaklines,mathescape,linenos,numbersep=5pt,xleftmargin=0pt,fontsize=\footnotesize]{cpp}{codes/extra_math.tex}
+
+%===============================
+
+\end{document}

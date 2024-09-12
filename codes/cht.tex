@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 const long long INF = 2e18 + 10; // Elég nagynak kell lennie
 struct line{ // a * x + b | a, b: kezdetben a legrosszabb egyenes
     mutable long long a = 0, b = INF;
@@ -38,7 +35,7 @@ struct li_chao{ // update(line) hozzáad egy egyenest, query(x) x-helyen lévő 
     long long query(long long x) { return query(root, L, R, x); }
 };
 
-struct CHT{ // set cht, valosakhoz is jo
+struct CHT{
     struct comp{ bool operator()(const line& e1, const line& e2) const { return !e1.point && !e2.point ? e1.a > e2.a : e1.lef < e2.lef; } };
     set<line, comp> lines;
     static inline bool check(const line& a, const line& b, const line& c) { return a.intersect(c) < a.intersect(b); }
