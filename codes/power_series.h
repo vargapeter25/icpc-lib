@@ -45,7 +45,7 @@ __attribute__((constructor)) void init() {
     constexpr mint g = mint(mint::mod_primitive_root()).pow(mod / N);
     for (int i = N / 2 + 1; i < N; ++i) w[i] = w[i - 1] * g;
     for (int i = N / 2 - 1; i > 0; --i) w[i] = w[i << 1];
-    for (int i = 2; i <= N; i++) invi[i] = invi[mod % i] * (mint() - mint(mod / i));
+    for (int i = 2; i <= N; i++) invi[i] = invi[mod % i] * (mint() - mint(mod / i)); // csak a log-hoz kell
 }
 void dft(mint f[], int n) { // n kettő hatvány
     for (int k = n / 2; k; k /= 2)
