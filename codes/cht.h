@@ -7,11 +7,11 @@ struct line{ // a * x + b | a, b: kezdetben a legrosszabb egyenes
     mutable long double lef = -2e18; bool point = false; // csak a set cht-hoz
     long long get(long long x) const { return a * x + b; }
     long double intersect(const line& e) const { return (long double)(e.b - b) / (a - e.a); }
-    bool bad() const { return b == INF; } // ellenőrzi, hogy az egyenes mindennél rosszabb-e (nincsen)
+    bool bad() const { return b == INF; } // ellenorzi, hogy az egyenes mindennél rosszabb-e (nincsen)
 };
 
-struct li_chao{ // update(line) hozzáad egy egyenest, query(x) x-helyen lévő minimum y értéket adja vissza
-    struct node{ // Előre foglalt memóriával gyorsabb
+struct li_chao{ // update(line) hozzáad egy egyenest, query(x) x-helyen lévo minimum y értéket adja vissza
+    struct node{ // Elore foglalt memóriával gyorsabb
         line e;
         node *l = NULL, *r = NULL;
     } *root;

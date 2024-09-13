@@ -42,14 +42,14 @@ __attribute__((constructor)) void init() {
     for (int i = N / 2 - 1; i > 0; --i) w[i] = w[i << 1];
     for (int i = 2; i <= N; i++) invi[i] = invi[mod % i] * (mint() - mint(mod / i));
 }
-void dft(mint f[], int n) { // n kettő hatvány
+void dft(mint f[], int n) { // n ketto hatvány
     for (int k = n / 2; k; k /= 2)
         for (int i = 0; i < n; i += k + k)
             for (int j = 0; j < k; ++j) {
                 mint x = f[i + j]; mint y = f[i + j + k]; f[i + j] = x + y; f[i + j + k] = (x - y) * w[k + j];
             }
 }
-void ift(mint f[], int n) { // n kettő hatvány
+void ift(mint f[], int n) { // n ketto hatvány
     for (int k = 1; k < n; k *= 2)
         for (int i = 0; i < n; i += k + k)
             for (int j = 0; j < k; ++j) {
@@ -134,7 +134,7 @@ struct poly : std::vector<mint> { using std::vector<mint>::vector;
 };
 
 /*
-poly: ugyanúgy működik, mint az std::vector
-műveletek: +, -, * pontoknékt, derivátl, integrál, (resize, dft, ift, ins, del, reverse)
-constans műveletek: conv, inv, log, exp, pow, sqrt, div, rem
+poly: ugyanúgy muködik, mint az std::vector
+muveletek: +, -, * pontoknékt, derivátl, integrál, (resize, dft, ift, ins, del, reverse)
+constans muveletek: conv, inv, log, exp, pow, sqrt, div, rem
 */

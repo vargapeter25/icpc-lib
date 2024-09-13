@@ -2,7 +2,7 @@
 using namespace std;
 struct node{
     vector<int> to;
-    int l, r, i, p, hld_p, sz, d; // l: st bal, r: st jobb, i: st idx, p: ős, hld_p: light edge előtti ős, sz: részfa mérete, d: gyökértől vett távolság
+    int l, r, i, p, hld_p, sz, d; // l: st bal, r: st jobb, i: st idx, p: os, hld_p: light edge elotti os, sz: részfa mérete, d: gyökértol vett távolság
     // heavy út: [l, r], részfa: [i, i + sz), !!! szegmensfában g[x].i-t kell használni
 };
 vector<node> g;

@@ -65,7 +65,7 @@ bool intersect(const line& l1, const line& l2, point& res) {
     return true;
 }
 
-bool intersect(point a, point b, point c, point d, point& left, point& right) { // ellenőrzi a metszést, metszés esetén a [left, right] szakasz a metszet
+bool intersect(point a, point b, point c, point d, point& left, point& right) { // ellenorzi a metszést, metszés esetén a [left, right] szakasz a metszet
     if (!intersect1(a.x, b.x, c.x, d.x) || !intersect1(a.y, b.y, c.y, d.y))
         return false;
     line m(a, b);
@@ -132,7 +132,7 @@ void tangents (point c, double r1, double r2, vector<line> & ans) {
     ans.push_back (l);
 }
 
-vector<line> tangents (circle a, circle b) { // 2 kör közös érintői
+vector<line> tangents (circle a, circle b) { // 2 kör közös érintoi
     vector<line> ans;
     for (int i=-1; i<=1; i+=2)
         for (int j=-1; j<=1; j+=2)
