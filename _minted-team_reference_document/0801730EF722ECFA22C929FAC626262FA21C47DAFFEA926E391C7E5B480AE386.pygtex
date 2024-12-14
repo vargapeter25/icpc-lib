@@ -1,0 +1,115 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZlt{}bits/stdc++.h\PYGZgt{}}
+\PYG{k}{using}\PYG{+w}{ }\PYG{k}{namespace}\PYG{+w}{ }\PYG{n+nn}{std}\PYG{p}{;}
+
+\PYG{k}{using}\PYG{+w}{ }\PYG{n}{ll}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{p}{;}
+\PYG{k}{typedef}\PYG{+w}{ }\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{snode}\PYG{+w}{ }\PYG{o}{*}\PYG{n}{sn}\PYG{p}{;}
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{snode}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{         }\PYG{c+c1}{//////// VARIABLES}
+\PYG{+w}{	}\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{p}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{];}\PYG{+w}{        }\PYG{c+c1}{// parent, children}
+\PYG{+w}{	}\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{flip}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{     }\PYG{c+c1}{// subtree flipped or not}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{size}\PYG{p}{;}\PYG{+w}{          }\PYG{c+c1}{// \PYGZsh{} splay tree csúcs, aktuálisban}
+\PYG{+w}{	}\PYG{n}{ll}\PYG{+w}{ }\PYG{n}{val}\PYG{p}{;}\PYG{+w}{            }\PYG{c+c1}{// value in node}
+\PYG{+w}{	}\PYG{n}{snode}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{\PYGZus{}val}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{val}\PYG{p}{(}\PYG{n}{\PYGZus{}val}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{n}{p}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nb}{NULL}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{upd}\PYG{p}{();}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{	}\PYG{k}{friend}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{get\PYGZus{}size}\PYG{p}{(}\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{?}\PYG{+w}{ }\PYG{n}{x}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{size}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{	}\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{prop}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{  }\PYG{c+c1}{// lazy prop}
+\PYG{+w}{		}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{flip}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{return}\PYG{p}{;}
+\PYG{+w}{		}\PYG{n}{swap}\PYG{p}{(}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]);}
+\PYG{+w}{		}\PYG{n}{flip}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{		}\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}
+\PYG{+w}{			}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{c}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}\PYG{+w}{ }\PYG{n}{c}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{flip}\PYG{+w}{ }\PYG{o}{\PYGZca{}=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{	}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{	}\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{upd}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{  }\PYG{c+c1}{// recalc vals}
+\PYG{+w}{		}\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{c}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}\PYG{+w}{ }\PYG{n}{c}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{prop}\PYG{p}{();}
+\PYG{+w}{		}\PYG{n}{size}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{get\PYGZus{}size}\PYG{p}{(}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{get\PYGZus{}size}\PYG{p}{(}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]);}
+\PYG{+w}{		}\PYG{c+c1}{// virtuális részva adatok használata}
+\PYG{+w}{	}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{	}\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{vupd}\PYG{p}{()\PYGZob{}\PYGZcb{}}
+\PYG{+w}{	}\PYG{c+c1}{//////// SPLAY TREE OPERATIONS}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{dir}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{		}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{p}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{l+m+mi}{\PYGZhy{}2}\PYG{p}{;}
+\PYG{+w}{		}\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{c}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{k}{this}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{;}
+\PYG{+w}{		}\PYG{k}{return}\PYG{+w}{ }\PYG{l+m+mi}{\PYGZhy{}1}\PYG{p}{;}\PYG{+w}{  }\PYG{c+c1}{// p is path\PYGZhy{}parent pointer}
+\PYG{+w}{	}\PYG{p}{\PYGZcb{}}\PYG{+w}{  }\PYG{c+c1}{// \PYGZhy{}\PYGZgt{} not in current splay tree}
+\PYG{+w}{	}\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{is\PYGZus{}root}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{dir}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{	}\PYG{k}{friend}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{set\PYGZus{}link}\PYG{p}{(}\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{d}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{y}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{y}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{p}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{;}\PYG{+w}{ }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{d}\PYG{+w}{ }\PYG{o}{\PYGZgt{}=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{x}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{c}\PYG{p}{[}\PYG{n}{d}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{;}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{	}\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{rot}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{  }\PYG{c+c1}{// assume p and p\PYGZhy{}\PYGZgt{}p propagated}
+\PYG{+w}{		}\PYG{n}{assert}\PYG{p}{(}\PYG{o}{!}\PYG{n}{is\PYGZus{}root}\PYG{p}{());}
+\PYG{+w}{		}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{dir}\PYG{p}{();}\PYG{+w}{ }\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{pa}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{p}\PYG{p}{;}
+\PYG{+w}{		}\PYG{n}{set\PYGZus{}link}\PYG{p}{(}\PYG{n}{pa}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{p}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{this}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{pa}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{dir}\PYG{p}{());}\PYG{+w}{ }\PYG{n}{set\PYGZus{}link}\PYG{p}{(}\PYG{n}{pa}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{c}\PYG{p}{[}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{\PYGZca{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{);}\PYG{+w}{ }\PYG{n}{set\PYGZus{}link}\PYG{p}{(}\PYG{k}{this}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{pa}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{\PYGZca{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{);}
+\PYG{+w}{		}\PYG{n}{pa}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{upd}\PYG{p}{();}
+\PYG{+w}{	}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{	}\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{splay}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{		}\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{is\PYGZus{}root}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{o}{!}\PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{is\PYGZus{}root}\PYG{p}{())}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{			}\PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{prop}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{prop}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{prop}\PYG{p}{();}
+\PYG{+w}{			}\PYG{n}{dir}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{dir}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{?}\PYG{+w}{ }\PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{rot}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{rot}\PYG{p}{();}\PYG{+w}{ }\PYG{n}{rot}\PYG{p}{();}
+\PYG{+w}{		}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{		}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{is\PYGZus{}root}\PYG{p}{())}\PYG{+w}{ }\PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{prop}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{prop}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{rot}\PYG{p}{();}
+\PYG{+w}{		}\PYG{n}{prop}\PYG{p}{();}\PYG{+w}{ }\PYG{n}{upd}\PYG{p}{();}
+\PYG{+w}{	}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{	}\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{fbo}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{b}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{  }\PYG{c+c1}{// find by order}
+\PYG{+w}{		}\PYG{n}{prop}\PYG{p}{();}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{z}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{get\PYGZus{}size}\PYG{p}{(}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]);}\PYG{+w}{  }\PYG{c+c1}{// of splay tree}
+\PYG{+w}{		}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{b}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{z}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{n}{splay}\PYG{p}{();}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{k}{this}\PYG{p}{;}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{		}\PYG{k}{return}\PYG{+w}{ }\PYG{n}{b}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{z}\PYG{+w}{ }\PYG{o}{?}\PYG{+w}{ }\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{fbo}\PYG{p}{(}\PYG{n}{b}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{fbo}\PYG{p}{(}\PYG{n}{b}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{z}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{);}
+\PYG{+w}{	}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{	}\PYG{c+c1}{//////// BASE OPERATIONS}
+\PYG{+w}{	}\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{access}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{  }\PYG{c+c1}{// bring this to top of tree, propagate}
+\PYG{+w}{		}\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{this}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{pre}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nb}{NULL}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{v}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{v}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{p}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{			}\PYG{n}{v}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{splay}\PYG{p}{();}\PYG{+w}{  }\PYG{c+c1}{// now switch virtual children}
+\PYG{+w}{			}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{pre}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{vupd}\PYG{p}{();}\PYG{+w}{ }\PYG{c+c1}{// pre törlése (mostantól rendes gyerek)}
+\PYG{+w}{			}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{v}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}\PYG{+w}{ }\PYG{n}{vupd}\PYG{p}{();}\PYG{+w}{ }\PYG{c+c1}{// c[1] hozzáadása (mostantól virtuális gyerek)}
+\PYG{+w}{			}\PYG{n}{v}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{pre}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{v}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{upd}\PYG{p}{();}\PYG{+w}{ }\PYG{n}{pre}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{;}
+\PYG{+w}{		}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{		}\PYG{n}{splay}\PYG{p}{();}
+\PYG{+w}{		}\PYG{n}{assert}\PYG{p}{(}\PYG{o}{!}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]);}\PYG{+w}{  }\PYG{c+c1}{// right subtree is empty}
+\PYG{+w}{	}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{	}\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{make\PYGZus{}root}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{c+c1}{// ez lesz a fa gyökere}
+\PYG{+w}{		}\PYG{n}{access}\PYG{p}{();}\PYG{+w}{ }\PYG{n}{flip}\PYG{+w}{ }\PYG{o}{\PYGZca{}=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{access}\PYG{p}{();}
+\PYG{+w}{		}\PYG{n}{assert}\PYG{p}{(}\PYG{o}{!}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{o}{!}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]);}
+\PYG{+w}{	}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{	}\PYG{c+c1}{//////// QUERIES}
+\PYG{+w}{	}\PYG{k}{friend}\PYG{+w}{ }\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{lca}\PYG{p}{(}\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{		}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{;}
+\PYG{+w}{		}\PYG{n}{x}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{access}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{y}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{access}\PYG{p}{();}
+\PYG{+w}{		}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{x}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{p}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n+nb}{NULL}\PYG{p}{;}
+\PYG{+w}{		}\PYG{n}{x}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{splay}\PYG{p}{();}
+\PYG{+w}{		}\PYG{k}{return}\PYG{+w}{ }\PYG{n}{x}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{p}\PYG{+w}{ }\PYG{o}{?:}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{;}\PYG{+w}{  }\PYG{c+c1}{// y was below x in latter case}
+\PYG{+w}{	}\PYG{p}{\PYGZcb{}}\PYG{+w}{  }\PYG{c+c1}{// access at y did not affect x \PYGZhy{}\PYGZgt{} not connected}
+\PYG{+w}{	}\PYG{k}{friend}\PYG{+w}{ }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{connected}\PYG{p}{(}\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{lca}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{);}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{dist\PYGZus{}root}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{n}{access}\PYG{p}{();}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{get\PYGZus{}size}\PYG{p}{(}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]);}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{c+c1}{// \PYGZsh{} nodes above}
+\PYG{+w}{	}\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{get\PYGZus{}root}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{c+c1}{// get root of LCT component}
+\PYG{+w}{		}\PYG{n}{access}\PYG{p}{();}\PYG{+w}{ }\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{a}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{this}\PYG{p}{;}
+\PYG{+w}{		}\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{a}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}\PYG{+w}{ }\PYG{n}{a}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{a}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{a}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{prop}\PYG{p}{();}
+\PYG{+w}{		}\PYG{n}{a}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{access}\PYG{p}{();}
+\PYG{+w}{		}\PYG{k}{return}\PYG{+w}{ }\PYG{n}{a}\PYG{p}{;}
+\PYG{+w}{	}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{	}\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{get\PYGZus{}par}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{b}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{  }\PYG{c+c1}{// get b\PYGZhy{}th parent on path to root | can also get min, max on path to root, etc}
+\PYG{+w}{		}\PYG{n}{access}\PYG{p}{();}\PYG{+w}{ }\PYG{n}{b}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{get\PYGZus{}size}\PYG{p}{(}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{b}\PYG{p}{;}
+\PYG{+w}{		}\PYG{n}{assert}\PYG{p}{(}\PYG{n}{b}\PYG{+w}{ }\PYG{o}{\PYGZgt{}=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{		}\PYG{k}{return}\PYG{+w}{ }\PYG{n}{fbo}\PYG{p}{(}\PYG{n}{b}\PYG{p}{);}
+\PYG{+w}{	}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }
+\PYG{+w}{	}\PYG{c+c1}{//////// MODIFICATIONS}
+\PYG{+w}{	}\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{set}\PYG{p}{(}\PYG{n}{ll}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{n}{access}\PYG{p}{();}\PYG{+w}{ }\PYG{n}{val}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{v}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{upd}\PYG{p}{();}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{c+c1}{// changes value}
+\PYG{+w}{	}\PYG{k}{friend}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{link}\PYG{p}{(}\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{force}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{c+c1}{// ha force: x \PYGZhy{} y él minden esetben | ha nem force: akkor y\PYGZhy{}nak gyökérnek kell lenni}
+\PYG{+w}{		}\PYG{n}{assert}\PYG{p}{(}\PYG{o}{!}\PYG{n}{connected}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{));}
+\PYG{+w}{		}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{force}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{y}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{make\PYGZus{}root}\PYG{p}{();}\PYG{+w}{  }\PYG{c+c1}{// make x par of y}
+\PYG{+w}{		}\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{n}{y}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{access}\PYG{p}{();}\PYG{+w}{ }\PYG{n}{assert}\PYG{p}{(}\PYG{o}{!}\PYG{n}{y}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]);}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{		}\PYG{n}{x}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{access}\PYG{p}{();}\PYG{+w}{ }\PYG{n}{set\PYGZus{}link}\PYG{p}{(}\PYG{n}{y}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}\PYG{+w}{ }\PYG{n}{y}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{upd}\PYG{p}{();}
+\PYG{+w}{	}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{	}\PYG{k}{friend}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{cut}\PYG{p}{(}\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{  }\PYG{c+c1}{// cut y from its parent | ha nincs RTE}
+\PYG{+w}{		}\PYG{n}{y}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{access}\PYG{p}{();}
+\PYG{+w}{		}\PYG{n}{assert}\PYG{p}{(}\PYG{n}{y}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]);}
+\PYG{+w}{		}\PYG{n}{y}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{p}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{y}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nb}{NULL}\PYG{p}{;}
+\PYG{+w}{		}\PYG{n}{y}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{upd}\PYG{p}{();}
+\PYG{+w}{	}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{	}\PYG{k}{friend}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{cut}\PYG{p}{(}\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{sn}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{  }\PYG{c+c1}{// if x, y adj in tree}
+\PYG{+w}{		}\PYG{n}{x}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{make\PYGZus{}root}\PYG{p}{();}\PYG{+w}{ }\PYG{n}{y}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{access}\PYG{p}{();}
+\PYG{+w}{		}\PYG{n}{assert}\PYG{p}{(}\PYG{n}{y}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{o}{!}\PYG{n}{x}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{o}{!}\PYG{n}{x}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{c}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]);}
+\PYG{+w}{		}\PYG{n}{cut}\PYG{p}{(}\PYG{n}{y}\PYG{p}{);}
+\PYG{+w}{	}\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+\PYG{c+cm}{/*}
+\PYG{c+cm}{Link\PYGZhy{}cut tree, muveletek: link, cut, set | lca, connected, dist\PYGZus{}root, get\PYGZus{}root, get\PYGZus{}par}
+\PYG{c+cm}{Út querry\PYGZhy{}hez a get\PYGZus{}par\PYGZhy{}hoz hasonló implementáció kell + fbo implementáció, ha nem a teljes út kell. | Ha a, b út kell: 1. make\PYGZus{}root(a), 2. query b\PYGZhy{}tol gyökérig}
+\PYG{c+cm}{Részfa adatokhoz a vupd()\PYGZhy{}et kell módosítani, (az upd()\PYGZhy{}ben is bele kell írni) | fontos kell legyen a muveletnek inverze }
+\PYG{c+cm}{*/}
+\end{Verbatim}

@@ -1,0 +1,69 @@
+/*
+original source: https://github.com/Nisiyama-Suzune/LMR/tree/master/src/mathematics/recurrence-relation
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+const int mod = 998244353; // inverse: mod inverz
+struct berlekamp_massey {
+	struct poly { std::vector <int> a; poly() { a.clear(); }
+		poly (std::vector <int> &a) : a (a) {}
+		int length () const { return a.size(); }
+		poly move (int d) { std::vector <int> na (d, 0);
+			na.insert (na.end (), a.begin (), a.end ());
+			return poly (na); }
+		int calc(std::vector <int> &d, int pos) { int ret = 0;
+			for (int i = 0; i < (int) a.size (); ++i) {
+				if ((ret += 1LL * d[pos - i] * a[i] % mod) >= mod) {
+					ret -= mod; } }
+			return ret; }
+		poly operator - (const poly &b) {
+			std::vector <int> na (std::max (this -> length (), b.length ()));
+			for (int i = 0; i < (int) na.size (); ++i) {
+				int aa = i < this -> length () ? this -> a[i] : 0,
+					bb = i < b.length () ? b.a[i] : 0;
+				na[i] = (aa + mod - bb) % mod; }
+			return poly (na); } };
+	poly operator * (const int &c, const poly &p) { // lehet hogy ez nem fordul
+		std::vector <int> na (p.length ());
+		for (int i = 0; i < (int) na.size (); ++i) {
+			na[i] = 1LL * c * p.a[i] % mod; }
+		return na; }
+	std::vector <int> solve(vector<int> a) {
+		int n = a.size (); poly s, b;
+		s.a.push_back (1), b.a.push_back (1);
+		for (int i = 0, j = -1, ld = 1; i < n; ++i) {
+			int d = s.calc(a, i); if (d) {
+				if ((s.length () - 1) * 2 <= i) {
+					poly ob = b; b = s;
+					s = s - 1LL * d * inverse(ld) % mod * ob.move (i - j);
+					j = i; ld = d;
+				} else {
+					s = s - 1LL * d * inverse(ld) % mod * b.move (i - j); } } }
+		return s.a; } };
+//Bemenet: a sorozat elso n*2 tagja (n hosszú rekurzióhoz), kimenet a kepzest leiro vektor
+struct linear_rec {
+	const int LOG = 30, MOD = 1E9 + 7; int n;
+	std::vector <int> first, trans;
+	std::vector <std::vector <int>> bin;
+	std::vector <int> add (std::vector <int> &a, std::vector <int> &b) {
+		std::vector <int> result(n * 2 + 1, 0);
+		for (int i = 0; i <= n; ++i) for (int j = 0; j <= n; ++j) 
+			if ((result[i + j] += 1LL * a[i] * b[j] % MOD) >= MOD) result[i + j] -= MOD;
+		for (int i = 2 * n; i > n; --i) {
+			for (int j = 0; j < n; ++j)
+				if ((result[i - 1 - j] += 1LL * result[i] * trans[j] % MOD) >= MOD) result[i - 1 - j] -= MOD;
+			result[i] = 0; }
+		result.erase(result.begin() + n + 1, result.end());
+		return result; }
+	linear_rec (const std::vector <int> &first, const std::vector <int> &trans) : first(first), trans(trans) {
+			n = first.size(); std::vector <int> a(n + 1, 0); a[1] = 1; bin.push_back(a);
+			for (int i = 1; i < LOG; ++i) bin.push_back(add(bin[i - 1], bin[i - 1])); }
+	int solve (int k) {
+		std::vector <int> a(n + 1, 0); a[0] = 1;
+		for (int i = 0; i < LOG; ++i) if (k >> i & 1) a = add(a, bin[i]);
+		int ret = 0;
+		for (int i = 0; i < n; ++i) if ((ret += (long long) a[i + 1] * first[i] % MOD) >= MOD) ret -= MOD;
+		return ret; } };
+// linear_rec(a, b): a: sorozat eleje, b: kepzes | solve(k) megadja,a k-adik elemet
