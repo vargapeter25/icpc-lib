@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.4.26)  19 OCT 2024 08:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.4.26)  27 FEB 2025 19:50
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -582,7 +582,7 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                \setlength{\footskip}{4.35004pt}.
 
 [10])
-(./_minted-team_reference_document/AF0B61C8800A6908698CD0500642DC44A21C47DAFFEA
+(./_minted-team_reference_document/016E2A7DCF4B41496314A0972F4448E9A21C47DAFFEA
 926E391C7E5B480AE386.pygtex
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -645,9 +645,7 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                Make it at least 4.35004pt, for example:
 (fancyhdr)                \setlength{\footskip}{4.35004pt}.
 
-[14])
-(./_minted-team_reference_document/13B2456E455983FC4F61D4DAE5799CB6A21C47DAFFEA
-926E391C7E5B480AE386.pygtex
+[14]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -662,6 +660,8 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                \setlength{\footskip}{4.35004pt}.
 
 [15])
+(./_minted-team_reference_document/13B2456E455983FC4F61D4DAE5799CB6A21C47DAFFEA
+926E391C7E5B480AE386.pygtex)
 (./_minted-team_reference_document/0801730EF722ECFA22C929FAC626262FA21C47DAFFEA
 926E391C7E5B480AE386.pygtex
 
@@ -680,10 +680,26 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 [16])
 (./_minted-team_reference_document/D669411DA1D40AD2C03B3C597B9CC9F3A21C47DAFFEA
 926E391C7E5B480AE386.pygtex)
+(./_minted-team_reference_document/460E24C24B7B53DB0B0AE0A7C6248978A21C47DAFFEA
+926E391C7E5B480AE386.pygtex
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+
+Package fancyhdr Warning: \footskip is too small (0.0pt): 
+(fancyhdr)                Make it at least 4.35004pt, for example:
+(fancyhdr)                \setlength{\footskip}{4.35004pt}.
+
+[17])
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 113.
+(Font)              <12> on input line 116.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 113.
+(Font)              <8> on input line 116.
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -698,42 +714,30 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                Make it at least 4.35004pt, for example:
 (fancyhdr)                \setlength{\footskip}{4.35004pt}.
 
-[17]
+[18] (./team_reference_document.aux)
+runsystem(rm team_reference_document.pyg)...executed.
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-
-Package fancyhdr Warning: \footskip is too small (0.0pt): 
-(fancyhdr)                Make it at least 4.35004pt, for example:
-(fancyhdr)                \setlength{\footskip}{4.35004pt}.
-
-[18] (./team_reference_document.aux) ) 
+ ) 
 Here is how much of TeX's memory you used:
- 7355 strings out of 478287
- 145381 string characters out of 5849289
- 560494 words of memory out of 5000000
- 25382 multiletter control sequences out of 15000+600000
+ 7361 strings out of 478287
+ 145956 string characters out of 5849289
+ 557017 words of memory out of 5000000
+ 25385 multiletter control sequences out of 15000+600000
  474355 words of font info for 46 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 74i,12n,77p,1432b,668s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-supe
-r/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmit
-t10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/
-texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmtt10.pfb></usr/share/texmf/fonts/type1/public/cm-super/s
-frm1200.pfb>
-Output written on team_reference_document.pdf (19 pages, 204158 bytes).
+ 74i,12n,77p,1524b,668s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmitt10.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+sy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></us
+r/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb>
+Output written on team_reference_document.pdf (19 pages, 205622 bytes).
 PDF statistics:
  128 PDF objects out of 1000 (max. 8388607)
  82 compressed objects within 1 object stream

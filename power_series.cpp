@@ -150,3 +150,30 @@ vector<long long> div(vector<long long> a, vector<long long> b) { // a / b
 }
 
 vector<long long> rem(vector<long long> a, vector<long long> b) { sub(a, conv(div(a, b), b)); return a; }
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+
+    int n, m;
+    cin>>n>>m;
+    vector<long long> a(n), b(m);
+
+    for(long long &x : a) cin>>x;
+    for(long long &x : b) cin>>x;
+
+    vector<long long> d = div(a, b);
+    vector<long long> r = a;
+    sub(r, conv(d, b));
+
+    while(!d.empty() && d.back() == 0) d.pop_back();
+    while(!r.empty() && r.back() == 0) r.pop_back();
+
+    cout << d.size() << ' ' << r.size() << '\n';
+    for(long long &x : d) cout << x << ' ';
+    cout << '\n';
+    for(long long &x : r) cout << x << ' ';
+    cout << '\n';
+
+    return 0;
+}

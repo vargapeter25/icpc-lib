@@ -1,140 +1,147 @@
 // POWER SERIES OPERATIONS
 constexpr int mod = 998244353; // = 2^k * c + 1 | primitív gyöknek jónak kell lennie | 2013265921, 167772161, 2113929217
 constexpr int N = 1 << 20; // 2^l, l <= k | max N amit transzformálni lehet
-struct mint {
-    int x;
-    constexpr inline mint(int x = 0) : x(x) {}
-    constexpr inline mint operator+(mint o) const { return x + o.x < mod ? x + o.x : x + o.x - mod; }
-    constexpr inline mint operator-(mint o) const { return x - o.x < 0 ? x - o.x + mod : x - o.x; }
-    constexpr inline mint operator*(mint o) const { return int(uint64_t(x) * o.x % mod); }
-    constexpr inline mint &operator+=(mint o) { return *this = *this + o; }
-    constexpr inline mint &operator-=(mint o) { return *this = *this - o; }
-    constexpr inline mint &operator*=(mint o) { return *this = *this * o; }
-    constexpr inline mint inv() const { return pow(mod - 2); }
-    constexpr inline mint pow(auto x) const {
-        mint a = *this; mint b = 1; for (; x; x >>= 1) { if (x & 1) { b *= a; } a *= a; } return b;
-    }
-    constexpr inline mint sqrt() const {
-        if (pow(mod >> 1).x != 1) return 0;
-        int Q = (mod - 1) >> (__countr_zero(mod-1));
-        mint x = pow((Q + 1) >> 1), y = pow(Q);
-        for (int k = __countr_zero(mod - 1) - 1; k >= 0; --k) // TODO: fix 21
-            if (y.pow(1 << k).x != 1) {
-                x *= mint(mod_primitive_root()).pow(mod >> (k + 2));
-                y *= mint(mod_primitive_root()).pow(mod >> (k + 1));
-            }
-        return min(x.x, mod - x.x);
-    }
-    static constexpr long long mod_primitive_root(){ // kiszámítja a moduló egy primitív gyökét
-        long long primes[64] = {}; int size = 0; long long p = 2, m = mod-1;
-        while(p*p <= m) { if(m % p == 0) primes[size++] = p; while(m % p == 0) m /= p; ++p; } if(m > 1) primes[size++] = m;
-        for(long long i = 2; i < mod; i++) { bool ok = true; for(int j = 0; j < size; j++) ok = ok && mint(i).pow((mod - 1) / primes[j]).x != 1; if(ok) return i; }
-        return -1;
-    }
-};
 
-mint w[N];
-mint invi[N + 1];
-__attribute__((constructor)) void init() {
-    invi[1] = w[N / 2] = 1;
-    constexpr mint g = mint(mint::mod_primitive_root()).pow(mod / N);
-    for (int i = N / 2 + 1; i < N; ++i) w[i] = w[i - 1] * g;
-    for (int i = N / 2 - 1; i > 0; --i) w[i] = w[i << 1];
-    for (int i = 2; i <= N; i++) invi[i] = invi[mod % i] * (mint() - mint(mod / i));
+constexpr inline long long mod_pow(long long n, long long h) {
+    long long res = 1;
+    for(;h;h >>= 1) { if(h&(1LL)) res = res * n % mod; n = n * n % mod; }
+    return res;
 }
-void dft(mint f[], int n) { // n ketto hatvány
+
+constexpr long long mod_primitive_root(){ // kiszámítja a moduló egy primitív gyökét
+    long long primes[64] = {}; int size = 0; long long p = 2, m = mod-1;
+    while(p*p <= m) { if(m % p == 0) primes[size++] = p; while(m % p == 0) m /= p; ++p; } if(m > 1) primes[size++] = m;
+    for(long long i = 2; i < mod; i++) { bool ok = true; for(int j = 0; j < size; j++) ok = ok && mod_pow(i, (mod - 1) / primes[j]) != 1; if(ok) return i; }
+    return -1;
+}
+
+constexpr inline long long mod_sqrt(long long a) {
+    if (mod_pow(a, mod >> 1) != 1) return 0;
+    int Q = (mod - 1) >> (__countr_zero(mod-1));
+    long long x = mod_pow(a, (Q + 1) >> 1), y = mod_pow(x, Q);
+    for (int k = __countr_zero(mod - 1) - 1; k >= 0; --k)
+        if (mod_pow(y, 1 << k) != 1) {
+            x *= pow(mod_primitive_root(), mod >> (k + 2));
+            y *= pow(mod_primitive_root(), mod >> (k + 1));
+        }
+    return min(x, mod - x);
+}
+
+long long w[N];
+long long invi[N + 1];
+__attribute__((constructor)) void init() { // lefut a program futás elején automatikusan
+    invi[1] = w[N / 2] = 1;
+    constexpr long long g = mod_pow(mod_primitive_root(), mod / N);
+    // const double PI = acos(-1); double ang = 2 * PI / n * (invert ? -1 : 1);
+    for (int i = N / 2 + 1; i < N; ++i) w[i] = w[i - 1] * g % mod; // complex<double>(cos(ang * (i - N / 2)), sin(ang * (i - N / 2)));
+    for (int i = N / 2 - 1; i > 0; --i) w[i] = w[i << 1];
+    for (int i = 2; i <= N; i++) invi[i] = invi[mod % i] * (mod - mod / i) % mod; // csak a log-hoz kell
+}
+void dft(long long f[], int n) { // n ketto hatvány
+    assert(__builtin_popcount(n) == 1);
     for (int k = n / 2; k; k /= 2)
         for (int i = 0; i < n; i += k + k)
             for (int j = 0; j < k; ++j) {
-                mint x = f[i + j]; mint y = f[i + j + k]; f[i + j] = x + y; f[i + j + k] = (x - y) * w[k + j];
+                long long x = f[i + j]; long long y = f[i + j + k]; f[i + j] = (x + y) % mod; f[i + j + k] = (mod + x - y) * w[k + j] % mod;
             }
 }
-void ift(mint f[], int n) { // n ketto hatvány
+void ift(long long f[], int n) { // n ketto hatvány
+    assert(__builtin_popcount(n) == 1);
     for (int k = 1; k < n; k *= 2)
         for (int i = 0; i < n; i += k + k)
             for (int j = 0; j < k; ++j) {
-                mint x = f[i + j]; mint y = f[i + j + k] * w[k + j]; f[i + j] = x + y; f[i + j + k] = x - y;
+                long long x = f[i + j]; long long y = f[i + j + k] * w[k + j] % mod; f[i + j] = (x + y) % mod; f[i + j + k] = (mod + x - y) % mod;
             }
-    mint inv = mod - (mod - 1) / n;
+    long long inv = mod - (mod - 1) / n;
     std::reverse(f + 1, f + n);
-    for (int i = 0; i < n; ++i) f[i] *= inv;
+    for (int i = 0; i < n; ++i) f[i] = f[i] * inv % mod;
 }
-struct poly : std::vector<mint> { using std::vector<mint>::vector;
-    poly &add(const poly &o) { if (size() < o.size()) resize(o.size()); for (int i = 0; i < o.size(); ++i) (*this)[i] += o[i]; return *this; }
-    poly &sub(const poly &o) { if (size() < o.size()) resize(o.size()); for (int i = 0; i < o.size(); ++i) (*this)[i] -= o[i]; return *this; }
-    poly &mul(const poly &o) { if (size() < o.size()) resize(o.size()); for (int i = 0; i < o.size(); ++i) (*this)[i] *= o[i]; return *this; }
-    poly &mul(const mint &o) { for (mint &i: *this) i *= o; return *this; }
-    poly &derivative() { for(int i = 0; i < (int)size() - 1; i++) (*this)[i] = (*this)[i + 1] * mint(i + 1); pop_back(); return *this; }
-    poly &integral()   { resize(size()+1); for(int i = (int)size() - 1; i > 0; i--) (*this)[i] = (*this)[i-1] * invi[i]; (*this)[0] = mint(); return *this; } // lehet overflow invi mérete N !!!
-    
-    poly copy() const { return *this; }
-    poly &resize(auto sz) { return vector::resize(sz), *this; }
-    poly &dft(int n) { return ::dft(resize(n).data(), n), *this; }
-    poly &ift(int n) { return ::ift(resize(n).data(), n), *this; }
-    poly &ins(int sz) { return insert(begin(), sz, mint()), *this; }
-    poly &del(int sz) { return erase(begin(), begin() + sz), *this; }
-    poly &reverse() { return std::reverse(begin(), end()), *this;}
-    poly pre(int sz) const { return sz < size() ? poly(begin(), begin() + sz) : copy(); }
-    poly &reduce() { while(!empty() && back().x == 0) pop_back(); return *this; }
 
-    poly conv(const poly &o){
-        int n = __bit_ceil(size() + o.size() - 1); 
-        return copy().dft(n).mul(o.copy().dft(n)).ift(n).resize(size() + o.size() - 1);
+void dft(vector<long long> &a, int n){
+    assert(__builtin_popcount(n) == 1);
+    a.resize(n);
+    dft(a.data(), n);
+}
+
+void ift(vector<long long> &a, int n){
+    assert(__builtin_popcount(n) == 1);
+    a.resize(n);
+    ift(a.data(), n);
+}
+
+void add(vector<long long> &a, const vector<long long> &b){ if(a.size() < b.size()) a.resize(b.size()); for(int i = 0; i < (int)b.size(); i++) a[i] = (a[i] + b[i]) % mod; }
+void sub(vector<long long> &a, const vector<long long> &b){ if(a.size() < b.size()) a.resize(b.size()); for(int i = 0; i < (int)b.size(); i++) a[i] = (a[i] - b[i] + mod) % mod; }
+void mul(vector<long long> &a, const vector<long long> &b){ int n = min(a.size(), b.size()); a.resize(n); for(int i = 0; i < n; i++) a[i] = a[i] * b[i] % mod; }
+void mul(vector<long long> &a, long long t){ for(int i = 0; i < (int)a.size(); i++) a[i] = a[i] * t % mod; }
+void derivate(vector<long long> &a) { for(int i = 0; i < (int)a.size()-1; i++) a[i] = a[i + 1] * (i + 1) % mod; a.pop_back(); }
+void integrate(vector<long long> &a) { a.push_back(0); for(int i = (int)a.size() - 1; i > 0; i--) a[i] = a[i - 1] * invi[i] % mod; a[0] = 0; } // invi[] méretére figyelni kell
+void del(vector<long long> &a, int s) { a.erase(a.begin(), a.begin() + min(s, (int)a.size())); }
+void ins(vector<long long> &a, int s) { a.insert(a.begin(), s, 0); }
+
+vector<long long> conv(vector<long long> a, vector<long long> b){
+    int sz = (int)a.size() + (int)b.size() - 1, n = __bit_ceil(max(sz, 0));
+    a.resize(n), b.resize(n);
+    dft(a, n); dft(b, n); mul(a, b); ift(a, n);
+    return vector<long long>(a.begin(), a.begin() + sz);
+}
+
+vector<long long> inv(const vector<long long>& a) {
+    if(a[0] == 0) return vector<long long>{};
+    int m = a.size();
+    vector<long long> res = {mod_pow(a[0], mod - 2)};
+    for(int k = 1; k < m; k *= 2){
+        int n = k * 2;
+        res.resize(n);
+        vector<long long> p = res; 
+        vector<long long> q(a.begin(), a.begin() + min((int)a.size(), n));
+        dft(p, n);
+        dft(q, n); 
+        mul(q, p); ift(q, n); del(q, k); dft(q, n); mul(p, q); ift(p, n); ins(p, k); p.resize(n); sub(res, p);
     }
-    poly inv() const {
-        if (front().x == 0) return {};
-        int m = size();
-        poly inv = {front().inv()};
-        for (int k = 1; k < m; k *= 2) {
-            int n = k * 2; poly a = inv.copy().dft(n), b = pre(n).dft(n);
-            inv.sub(a.copy().mul(b).ift(n).del(k).dft(n).mul(a).ift(n).resize(k).ins(k));
-        }
-        return inv.resize(m);
-    }
-    poly log() const{ // res[0] = 0
-        int n = __bit_ceil(size() * 2 - 1);
-        return copy().derivative().dft(n).mul(inv().dft(n)).ift(n).integral().resize(size());
-    }
-    poly exp() const { // p[0] == 0, különben nem valid az eremény
-        if (front().x != 0) return {};
-        int m = size();
-        poly e = {1};
-        for (int k = 1; k < m; k *= 2) {
-            int n = k * 2;
-            poly elog = e.resize(n).log(); e.dft(n*2);
-            e.add(pre(n).sub(elog).dft(n*2).mul(e)).ift(n*2).resize(n);
-        }
-        return e.resize(m);
-    }
-    poly pow(auto k) const { // k: int, long long
-        if(k == 0) return poly{1}.resize(size());
-        int j = 0;
-        while(j < size() && (*this)[j].x == 0) ++j;
-        if(j == size()) return poly{0}.resize(size());
-        mint c = (*this)[j];
-        return copy().del(j).mul(c.inv()).log().mul(mint(k % mod)).exp().mul(c.pow(k % (mod - 1))).ins(j > size() / k ? (long long)size() : j * k).resize(size());
-    }
-    poly sqrt() const { // ha nem létezik akkor az eredmény: {}
-        int j = 0;
-        while(j < size() && (*this)[j].x == 0) ++j;
-        if(j == size()) return poly{0}.resize(size());
-        mint c = (*this)[j].sqrt();
-        if(c.x == 0 || j % 2 != 0) return {};
-        return copy().del(j).mul((*this)[j].inv()).resize(size() - j / 2).pow(mint(2).inv().x).mul(c).ins(j / 2);
-    }
-    poly div(const poly& o) {
-        poly a = copy().reduce().reverse(), b = o.copy().reduce().reverse();
-        int m = a.size() - b.size() + 1;
-        if(a.empty() || b.empty() || a.size() < b.size()) return b.empty() ? poly{} : poly{0};
-        return a.conv(b.resize(a.size()).inv()).resize(m).reverse();
-    }
-    poly rem(const poly& o) { 
-        return copy().sub(div(o).conv(o));
-    }
-};
+    return vector<long long>(res.begin(), res.begin() + m);
+}
 
 /*
-poly: ugyanúgy muködik, mint az std::vector
-muveletek: +, -, * pontoknékt, derivátl, integrál, (resize, dft, ift, ins, del, reverse)
-constans muveletek: conv, inv, log, exp, pow, sqrt, div, rem
+Polinom művelet Hensel Lemmával: q_0 úgy kell választani, hogy konstans jó legyen | q_{k+1} = q_{k} - F(q_{k}) / F'(q_{k}) | q_k a x^2^k-ra jó
+pow: elején lévő 0-at le kell venni utána be kell szorozni c-vel, hogy p[0] = 1 legyen, utána log() -> *k -> exp() -> * c^{-k} -> + 0-k az elejére
+sqrt: ellenőrizni kell, hogy p[0]-nak van-e gyöke: 0-t leszedni: pow()-al 1/2-re elmelni -> c-vel felszorozni -> vissza rakni a 0-t (csak akkor jó ha páros sok 0 van az elején)
 */
+
+vector<long long> log(vector<long long> a){ // res[0] = 0
+    int n = __bit_ceil(a.size() * 2 - 1), sz(a.size());
+    vector<long long> a_inv = inv(a); a_inv.resize(n);
+    derivate(a); dft(a, n); dft(a_inv, n); mul(a, a_inv); ift(a, n); integrate(a); a.resize(sz);
+    return a;
+}
+
+vector<long long> exp(const vector<long long>& a) { // p[0] == 0, különben nem valid az eremény
+    if (a[0] != 0) return {};
+    int m = a.size();
+    vector<long long> e = {1};
+    for (int k = 1; k < m; k *= 2) {
+        int n = k * 2;
+        vector<long long> elog(e); elog.resize(n); elog = log(elog);
+        dft(e, n*2);
+        vector<long long> p(a.begin(), a.begin() + min((int)a.size(), n));
+        sub(p, elog); dft(p, n*2); mul(p, e);
+        add(e, p); ift(e, n*2); e.resize(n);
+    }
+    e.resize(m);
+    return e;
+}
+
+vector<long long> div(vector<long long> a, vector<long long> b) { // a / b
+    while(!a.size() && a.back() == 0) a.pop_back();
+    while(!b.size() && b.back() == 0) b.pop_back();
+    int m = (int)a.size() - (int)b.size() + 1; // kell az int!!!
+    if(a.empty() || b.empty() || a.size() < b.size()) return b.empty() ? vector<long long>{} : vector<long long>{0};
+    reverse(a.begin(), a.end()); reverse(b.begin(), b.end());
+    b.resize(a.size());
+    b = inv(b);
+    a = conv(a, b);
+    a.resize(m);
+    reverse(a.begin(), a.end());
+    return a;
+}
+
+vector<long long> rem(vector<long long> a, vector<long long> b) { sub(a, conv(div(a, b), b)); return a; }

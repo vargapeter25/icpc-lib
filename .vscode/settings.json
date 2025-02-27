@@ -41,6 +41,7 @@
         "vector": "cpp",
         "forward_list": "cpp",
         "system_error": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "cmath": "cpp"
     }
 }
